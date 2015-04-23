@@ -6,6 +6,11 @@ domain = require "domain"
 app = express()
 
 reportError = (err, type = "error", sync = false) ->
+	if err.code == "ECONNRESET"
+		# We're not interested in these for now, they're just aborted requests.
+		# TODO: Investigate whether there may also be other scenarios where an ECONNRESET is raised.
+		return
+
 	errorPayload = {}
 
 	Object.getOwnPropertyNames(err).forEach (key) ->
