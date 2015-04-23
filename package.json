@@ -25,6 +25,7 @@
     "express-domain-middleware": "^0.1.0",
     "express-promise-router": "0.0.7",
     "express-session": "^1.11.1",
+    "fancyshelf": "0.0.1",
     "file-stream-rotator": "joepie91/file-stream-rotator",
     "glob": "^4.3.5",
     "gm": "^1.17.0",
