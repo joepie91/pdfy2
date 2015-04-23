@@ -1,6 +1,6 @@
 set -e
 
-cd /home/pdfy
+cd /home/pdfy/pdfy2
 
 apt-get install -y authbind
 npm install -g coffee-script forever
