@@ -2,7 +2,7 @@ set -e
 
 cd /home/pdfy/pdfy2
 
-apt-get install -y authbind
+apt-get install -y authbind graphicsmagick
 npm install -g coffee-script forever
 
 touch /etc/authbind/byport/80
