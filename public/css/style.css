@@ -652,7 +652,8 @@ body {
   margin-bottom: 32px;
   border-radius: 4px; }
   .notice a {
-    color: white; }
+    color: white;
+    text-decoration: underline; }
   .notice p {
     margin: 8px 0px; }
 

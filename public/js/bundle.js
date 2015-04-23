@@ -56,9 +56,9 @@
 
 	$ = __webpack_require__(6);
 
-	autosize = __webpack_require__(8);
+	autosize = __webpack_require__(7);
 
-	marked = __webpack_require__(7);
+	marked = __webpack_require__(8);
 
 	scrollFloat = __webpack_require__(5);
 
@@ -9704,6 +9704,188 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+		Autosize 3.0.0
+		license: MIT
+		http://www.jacklmoore.com/autosize
+	*/
+	(function (global, factory) {
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, module], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+			factory(exports, module);
+		} else {
+			var mod = {
+				exports: {}
+			};
+			factory(mod.exports, mod);
+			global.autosize = mod.exports;
+		}
+	})(this, function (exports, module) {
+		'use strict';
+
+		function assign(ta) {
+			if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || ta.hasAttribute('data-autosize-on')) {
+				return;
+			}var maxHeight;
+			var heightOffset;
+
+			function init() {
+				var style = window.getComputedStyle(ta, null);
+
+				if (style.resize === 'vertical') {
+					ta.style.resize = 'none';
+				} else if (style.resize === 'both') {
+					ta.style.resize = 'horizontal';
+				}
+
+				// Chrome/Safari-specific fix:
+				// When the textarea y-over is hidden, Chrome/Safari doesn't reflow the text to account for the space
+				// made available by removing the scrollbar. This workaround will cause the text to reflow.
+				var width = ta.style.width;
+				ta.style.width = '0px';
+				// Force reflow:
+				/* jshint ignore:start */
+				ta.offsetWidth;
+				/* jshint ignore:end */
+				ta.style.width = width;
+
+				maxHeight = style.maxHeight !== 'none' ? parseFloat(style.maxHeight) : false;
+
+				if (style.boxSizing === 'content-box') {
+					heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+				} else {
+					heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+				}
+
+				update();
+			}
+
+			function update() {
+				var startHeight = ta.style.height;
+				var htmlTop = document.documentElement.scrollTop;
+				var bodyTop = document.body.scrollTop;
+
+				ta.style.height = 'auto';
+
+				var endHeight = ta.scrollHeight + heightOffset;
+
+				if (maxHeight !== false && maxHeight < endHeight) {
+					endHeight = maxHeight;
+					if (ta.style.overflowY !== 'scroll') {
+						ta.style.overflowY = 'scroll';
+					}
+				} else if (ta.style.overflowY !== 'hidden') {
+					ta.style.overflowY = 'hidden';
+				}
+
+				ta.style.height = endHeight + 'px';
+
+				// prevents scroll-position jumping
+				document.documentElement.scrollTop = htmlTop;
+				document.body.scrollTop = bodyTop;
+
+				if (startHeight !== ta.style.height) {
+					var evt = document.createEvent('Event');
+					evt.initEvent('autosize:resized', true, false);
+					ta.dispatchEvent(evt);
+				}
+			}
+
+			ta.addEventListener('autosize:destroy', (function (style) {
+				window.removeEventListener('resize', update);
+				ta.removeEventListener('input', update);
+				ta.removeEventListener('keyup', update);
+				ta.removeAttribute('data-autosize-on');
+				ta.removeEventListener('autosize:destroy');
+
+				Object.keys(style).forEach(function (key) {
+					ta.style[key] = style[key];
+				});
+			}).bind(ta, {
+				height: ta.style.height,
+				overflowY: ta.style.overflowY,
+				resize: ta.style.resize
+			}));
+
+			// IE9 does not fire onpropertychange or oninput for deletions,
+			// so binding to onkeyup to catch most of those events.
+			// There is no way that I know of to detect something like 'cut' in IE9.
+			if ('onpropertychange' in ta && 'oninput' in ta) {
+				ta.addEventListener('keyup', update);
+			}
+
+			window.addEventListener('resize', update);
+			ta.addEventListener('input', update);
+			ta.addEventListener('autosize:update', update);
+			ta.setAttribute('data-autosize-on', true);
+			ta.style.overflowY = 'hidden';
+			init();
+		}
+
+		function destroy(ta) {
+			if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA') {
+				return;
+			}var evt = document.createEvent('Event');
+			evt.initEvent('autosize:destroy', true, false);
+			ta.dispatchEvent(evt);
+		}
+
+		function update(ta) {
+			if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) {
+				return;
+			}var evt = document.createEvent('Event');
+			evt.initEvent('autosize:update', true, false);
+			ta.dispatchEvent(evt);
+		}
+
+		var autosize;
+
+		// Do nothing in IE8 or lower
+		if (typeof window.getComputedStyle !== 'function') {
+			autosize = function (el) {
+				return el;
+			};
+			autosize.destroy = function (el) {
+				return el;
+			};
+			autosize.update = function (el) {
+				return el;
+			};
+		} else {
+			autosize = function (el) {
+				if (el && el.length) {
+					Array.prototype.forEach.call(el, assign);
+				} else if (el && el.nodeName) {
+					assign(el);
+				}
+				return el;
+			};
+			autosize.destroy = function (el) {
+				if (el && el.length) {
+					Array.prototype.forEach.call(el, destroy);
+				} else if (el && el.nodeName) {
+					destroy(el);
+				}
+				return el;
+			};
+			autosize.update = function (el) {
+				if (el && el.length) {
+					Array.prototype.forEach.call(el, update);
+				} else if (el && el.nodeName) {
+					update(el);
+				}
+				return el;
+			};
+		}
+
+		module.exports = autosize;
+	});
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * marked - a markdown parser
 	 * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
@@ -10980,192 +11162,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-		Autosize 3.0.0
-		license: MIT
-		http://www.jacklmoore.com/autosize
-	*/
-	(function (global, factory) {
-		if (true) {
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, module], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-			factory(exports, module);
-		} else {
-			var mod = {
-				exports: {}
-			};
-			factory(mod.exports, mod);
-			global.autosize = mod.exports;
-		}
-	})(this, function (exports, module) {
-		'use strict';
-
-		function assign(ta) {
-			if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || ta.hasAttribute('data-autosize-on')) {
-				return;
-			}var maxHeight;
-			var heightOffset;
-
-			function init() {
-				var style = window.getComputedStyle(ta, null);
-
-				if (style.resize === 'vertical') {
-					ta.style.resize = 'none';
-				} else if (style.resize === 'both') {
-					ta.style.resize = 'horizontal';
-				}
-
-				// Chrome/Safari-specific fix:
-				// When the textarea y-over is hidden, Chrome/Safari doesn't reflow the text to account for the space
-				// made available by removing the scrollbar. This workaround will cause the text to reflow.
-				var width = ta.style.width;
-				ta.style.width = '0px';
-				// Force reflow:
-				/* jshint ignore:start */
-				ta.offsetWidth;
-				/* jshint ignore:end */
-				ta.style.width = width;
-
-				maxHeight = style.maxHeight !== 'none' ? parseFloat(style.maxHeight) : false;
-
-				if (style.boxSizing === 'content-box') {
-					heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
-				} else {
-					heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
-				}
-
-				update();
-			}
-
-			function update() {
-				var startHeight = ta.style.height;
-				var htmlTop = document.documentElement.scrollTop;
-				var bodyTop = document.body.scrollTop;
-
-				ta.style.height = 'auto';
-
-				var endHeight = ta.scrollHeight + heightOffset;
-
-				if (maxHeight !== false && maxHeight < endHeight) {
-					endHeight = maxHeight;
-					if (ta.style.overflowY !== 'scroll') {
-						ta.style.overflowY = 'scroll';
-					}
-				} else if (ta.style.overflowY !== 'hidden') {
-					ta.style.overflowY = 'hidden';
-				}
-
-				ta.style.height = endHeight + 'px';
-
-				// prevents scroll-position jumping
-				document.documentElement.scrollTop = htmlTop;
-				document.body.scrollTop = bodyTop;
-
-				if (startHeight !== ta.style.height) {
-					var evt = document.createEvent('Event');
-					evt.initEvent('autosize:resized', true, false);
-					ta.dispatchEvent(evt);
-				}
-			}
-
-			ta.addEventListener('autosize:destroy', (function (style) {
-				window.removeEventListener('resize', update);
-				ta.removeEventListener('input', update);
-				ta.removeEventListener('keyup', update);
-				ta.removeAttribute('data-autosize-on');
-				ta.removeEventListener('autosize:destroy');
-
-				Object.keys(style).forEach(function (key) {
-					ta.style[key] = style[key];
-				});
-			}).bind(ta, {
-				height: ta.style.height,
-				overflowY: ta.style.overflowY,
-				resize: ta.style.resize
-			}));
-
-			// IE9 does not fire onpropertychange or oninput for deletions,
-			// so binding to onkeyup to catch most of those events.
-			// There is no way that I know of to detect something like 'cut' in IE9.
-			if ('onpropertychange' in ta && 'oninput' in ta) {
-				ta.addEventListener('keyup', update);
-			}
-
-			window.addEventListener('resize', update);
-			ta.addEventListener('input', update);
-			ta.addEventListener('autosize:update', update);
-			ta.setAttribute('data-autosize-on', true);
-			ta.style.overflowY = 'hidden';
-			init();
-		}
-
-		function destroy(ta) {
-			if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA') {
-				return;
-			}var evt = document.createEvent('Event');
-			evt.initEvent('autosize:destroy', true, false);
-			ta.dispatchEvent(evt);
-		}
-
-		function update(ta) {
-			if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) {
-				return;
-			}var evt = document.createEvent('Event');
-			evt.initEvent('autosize:update', true, false);
-			ta.dispatchEvent(evt);
-		}
-
-		var autosize;
-
-		// Do nothing in IE8 or lower
-		if (typeof window.getComputedStyle !== 'function') {
-			autosize = function (el) {
-				return el;
-			};
-			autosize.destroy = function (el) {
-				return el;
-			};
-			autosize.update = function (el) {
-				return el;
-			};
-		} else {
-			autosize = function (el) {
-				if (el && el.length) {
-					Array.prototype.forEach.call(el, assign);
-				} else if (el && el.nodeName) {
-					assign(el);
-				}
-				return el;
-			};
-			autosize.destroy = function (el) {
-				if (el && el.length) {
-					Array.prototype.forEach.call(el, destroy);
-				} else if (el && el.nodeName) {
-					destroy(el);
-				}
-				return el;
-			};
-			autosize.update = function (el) {
-				if (el && el.length) {
-					Array.prototype.forEach.call(el, update);
-				} else if (el && el.nodeName) {
-					update(el);
-				}
-				return el;
-			};
-		}
-
-		module.exports = autosize;
-	});
-
-/***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var prefixes = __webpack_require__(12);
+	var prefixes = __webpack_require__(13);
 
 	/**
 	 * Pretty format a number with SI prefixes.
@@ -11236,7 +11236,7 @@
 	        // Node/CommonJS:
 	        factory(
 	            __webpack_require__(6),
-	            __webpack_require__(14)
+	            __webpack_require__(12)
 	        );
 	    } else {
 	        // Browser globals:
@@ -12750,105 +12750,6 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var util = __webpack_require__(13);
-
-	/**
-	 * SI Prefix Dictionary
-	 */
-	var prefixes =  [
-	  {pow10: Math.pow(10, -24),  prefix: 'yocto',  symbol: 'y'},
-	  {pow10: Math.pow(10, -21),  prefix: 'zepto',  symbol: 'z'},
-	  {pow10: Math.pow(10, -18),  prefix: 'atto',   symbol: 'a'},
-	  {pow10: Math.pow(10, -15),  prefix: 'femto',  symbol: 'f'},
-	  {pow10: Math.pow(10, -12),  prefix: 'pico',   symbol: 'p'},
-	  {pow10: Math.pow(10, -9),   prefix: 'nano',   symbol: 'n'},
-	  {pow10: Math.pow(10, -6),   prefix: 'micro',  symbol: 'μ'},
-	  {pow10: Math.pow(10, -3),   prefix: 'milli',  symbol: 'm'},
-	  {pow10: Math.pow(10, 0),    prefix: '',       symbol: ''},
-	  {pow10: Math.pow(10, 3),    prefix: 'kilo',   symbol: 'k'},
-	  {pow10: Math.pow(10, 6),    prefix: 'mega',   symbol: 'M'},
-	  {pow10: Math.pow(10, 9),    prefix: 'giga',   symbol: 'G'},
-	  {pow10: Math.pow(10, 12),   prefix: 'tera',   symbol: 'T'},
-	  {pow10: Math.pow(10, 15),   prefix: 'peta',   symbol: 'P'},
-	  {pow10: Math.pow(10, 18),   prefix: 'exa',    symbol: 'E'},
-	  {pow10: Math.pow(10, 21),   prefix: 'zetta',  symbol: 'Z'},
-	  {pow10: Math.pow(10, 24),   prefix: 'yotta',  symbol: 'Y'}
-	];
-	module.exports = prefixes;
-
-	/**
-	 * Adjust the magnitude of a number to that indicated by the prefix at prefixIndex.
-	 */
-	function adjustNumber(number, prefixIndex) {
-	  return util.round(number / prefixes[prefixIndex].pow10, 2);
-	}
-	module.exports.adjustNumber = adjustNumber;
-
-	/**
-	 * Get the most "best match" prefix index for a given number/
-	 */
-	function getPrefixIndex(number) {
-	  // use absolute value for comparisons
-	  var abs = Math.abs(number);
-
-	  // attempt to match extremities
-	  if (abs <= prefixes[0].pow10) return 0;
-	  else if (abs >= prefixes[prefixes.length - 1].pow10) return prefixes.length - 1;
-
-	  // find best match
-	  for (var i = getInitialPrefixIterPos(); i < prefixes.length; i++) {
-	    if (abs < prefixes[i].pow10) return i - 1;
-	  }
-
-	  return 8;
-	}
-	module.exports.getPrefixIndex = getPrefixIndex;
-
-	/**
-	 * A crude optimization so that we can get a good iterator start position.
-	 *
-	 * Assumes absNumb is an the absolute value of a number.
-	 */
-	function getInitialPrefixIterPos(absNum) {
-	  return absNum >= prefixes[8].pow10 ? 8 : 0;
-	}
-	module.exports.getInitialPrefixIterPos = getInitialPrefixIterPos;
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * All credit here goes to Jérémie Astori!
-	 *
-	 * See http://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-in-javascript
-	 */
-	function round(value, exp) {
-	  if (typeof exp === 'undefined' || +exp === 0)
-	    return Math.round(value);
-
-	  value = +value;
-	  exp  = +exp;
-
-	  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
-	    return NaN;
-
-	  // Shift
-	  value = value.toString().split('e');
-	  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
-
-	  // Shift back
-	  value = value.toString().split('e');
-	  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
-	}
-	module.exports.round = round;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! jQuery UI - v1.11.1+CommonJS - 2014-09-17
 	* http://jqueryui.com
 	* Includes: widget.js
@@ -13412,6 +13313,105 @@
 
 
 	}));
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var util = __webpack_require__(14);
+
+	/**
+	 * SI Prefix Dictionary
+	 */
+	var prefixes =  [
+	  {pow10: Math.pow(10, -24),  prefix: 'yocto',  symbol: 'y'},
+	  {pow10: Math.pow(10, -21),  prefix: 'zepto',  symbol: 'z'},
+	  {pow10: Math.pow(10, -18),  prefix: 'atto',   symbol: 'a'},
+	  {pow10: Math.pow(10, -15),  prefix: 'femto',  symbol: 'f'},
+	  {pow10: Math.pow(10, -12),  prefix: 'pico',   symbol: 'p'},
+	  {pow10: Math.pow(10, -9),   prefix: 'nano',   symbol: 'n'},
+	  {pow10: Math.pow(10, -6),   prefix: 'micro',  symbol: 'μ'},
+	  {pow10: Math.pow(10, -3),   prefix: 'milli',  symbol: 'm'},
+	  {pow10: Math.pow(10, 0),    prefix: '',       symbol: ''},
+	  {pow10: Math.pow(10, 3),    prefix: 'kilo',   symbol: 'k'},
+	  {pow10: Math.pow(10, 6),    prefix: 'mega',   symbol: 'M'},
+	  {pow10: Math.pow(10, 9),    prefix: 'giga',   symbol: 'G'},
+	  {pow10: Math.pow(10, 12),   prefix: 'tera',   symbol: 'T'},
+	  {pow10: Math.pow(10, 15),   prefix: 'peta',   symbol: 'P'},
+	  {pow10: Math.pow(10, 18),   prefix: 'exa',    symbol: 'E'},
+	  {pow10: Math.pow(10, 21),   prefix: 'zetta',  symbol: 'Z'},
+	  {pow10: Math.pow(10, 24),   prefix: 'yotta',  symbol: 'Y'}
+	];
+	module.exports = prefixes;
+
+	/**
+	 * Adjust the magnitude of a number to that indicated by the prefix at prefixIndex.
+	 */
+	function adjustNumber(number, prefixIndex) {
+	  return util.round(number / prefixes[prefixIndex].pow10, 2);
+	}
+	module.exports.adjustNumber = adjustNumber;
+
+	/**
+	 * Get the most "best match" prefix index for a given number/
+	 */
+	function getPrefixIndex(number) {
+	  // use absolute value for comparisons
+	  var abs = Math.abs(number);
+
+	  // attempt to match extremities
+	  if (abs <= prefixes[0].pow10) return 0;
+	  else if (abs >= prefixes[prefixes.length - 1].pow10) return prefixes.length - 1;
+
+	  // find best match
+	  for (var i = getInitialPrefixIterPos(); i < prefixes.length; i++) {
+	    if (abs < prefixes[i].pow10) return i - 1;
+	  }
+
+	  return 8;
+	}
+	module.exports.getPrefixIndex = getPrefixIndex;
+
+	/**
+	 * A crude optimization so that we can get a good iterator start position.
+	 *
+	 * Assumes absNumb is an the absolute value of a number.
+	 */
+	function getInitialPrefixIterPos(absNum) {
+	  return absNum >= prefixes[8].pow10 ? 8 : 0;
+	}
+	module.exports.getInitialPrefixIterPos = getInitialPrefixIterPos;
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * All credit here goes to Jérémie Astori!
+	 *
+	 * See http://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-in-javascript
+	 */
+	function round(value, exp) {
+	  if (typeof exp === 'undefined' || +exp === 0)
+	    return Math.round(value);
+
+	  value = +value;
+	  exp  = +exp;
+
+	  if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0))
+	    return NaN;
+
+	  // Shift
+	  value = value.toString().split('e');
+	  value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+	  // Shift back
+	  value = value.toString().split('e');
+	  return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+	}
+	module.exports.round = round;
 
 
 /***/ }

@@ -8,6 +8,9 @@ npm install -g coffee-script forever
 touch /etc/authbind/byport/80
 chown pdfy /etc/authbind/byport/80
 chmod 755 /etc/authbind/byport/80
+touch /etc/authbind/byport/443
+chown pdfy /etc/authbind/byport/443
+chmod 755 /etc/authbind/byport/443
 
 chown -R pdfy:pdfy .
 
