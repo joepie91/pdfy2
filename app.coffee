@@ -141,6 +141,13 @@ runWrapper ->
 		accessLogStream = fileStreamRotator.getStream frequency: (config.accessLog.frequency ? "24h"), filename: config.accessLog.filename
 		app.use logger (config.accessLog.format ? "combined"), stream: accessLogStream
 
+	app.use (req, res, next) ->
+		if req.secure
+			res.set "Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload"
+			next()
+		else
+			res.redirect "https://pdf.yt/"
+
 	# Using /static/ paths to maintain backwards compatibility.
 	app.use("/static/thumbs", express.static(path.join(__dirname, 'thumbnails')))
 	app.use("/static/pdfjs", express.static(path.join(__dirname, 'public/pdfjs')))
