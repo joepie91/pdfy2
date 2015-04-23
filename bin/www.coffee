@@ -65,7 +65,7 @@ if config.ssl?.key?
 		credentials.cert = fs.readFileSync(config.ssl.cert)
 
 	if config.ssl.ca?
-		credentials.cert = fs.readFileSync(config.ssl.ca)
+		credentials.ca = fs.readFileSync(config.ssl.ca)
 
 	if config.ssl.ciphers?
 		credentials.ciphers = config.ssl.ciphers
