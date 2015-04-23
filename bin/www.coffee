@@ -3,6 +3,9 @@
 app = require('../app')
 debug = require('debug')('pdfy:server')
 http = require('http')
+https = require("https")
+config = require "../config.json"
+fs = require "fs"
 
 normalizePort = (val) ->
 	port = parseInt val, 10
@@ -49,8 +52,16 @@ onListening = ->
 port = normalizePort(process.env.PORT || '3000')
 app.set('port', port)
 
-server = http.createServer(app)
+httpServer = http.createServer(app)
 
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
+httpServer.listen(port)
+httpServer.on('error', onError)
+httpServer.on('listening', onListening)
+
+credentials: {pfx: fs.readFileSync(config.ssl.pfx), ciphers: "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA"}
+
+httpsServer = https.createServer(credentials, app)
+
+httpsServer.listen(443)
+httpsServer.on('error', onError)
+httpsServer.on('listening', onListening)
