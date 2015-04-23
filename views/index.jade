@@ -1,0 +1,78 @@
+extends layout
+
+block pageTitle
+	| Upload
+
+block content
+	if showNotice || maintenanceMode
+		.notice!= md(maintenanceModeText)
+
+	if !maintenanceMode || isAdmin
+		.upload-form
+			// TODO: Responsive layout for upload form!
+			form#upload_form(method="post", action="/upload", enctype="multipart/form-data")
+				// Stage 1: File selection
+				.upload
+					button#upload_activator.pure-button.button-browse(type="button") Click to upload
+					span.dragdrop-instructions ... or <strong>drag and drop</strong> a PDF file here, to upload it (max. 150 MB).
+					input(type="hidden", name="MAX_FILE_SIZE", value="157286400")
+					input#upload_element(type="file", name="file", accept="application/pdf")
+
+				// Stage 2: Display file information, let the user pick between 'public' and 'unlisted'
+				.fileinfo
+					h2
+						span.filename
+						|  (
+						span.filesize
+						| )
+
+					.privacySettings
+						div
+							input#vis_public(type="radio", name="visibility", value="public", checked)
+							label(for="vis_public")
+								strong Public
+								|  (anybody can view it, it will be mirrored, and can be put into a gallery)
+
+						div
+							input#vis_unlisted(type="radio", name="visibility", value="unlisted")
+							label(for="vis_unlisted")
+								strong Unlisted
+								|  (only people with the exact URL can view the PDF)
+
+					button.pure-button.button-submit(type="submit") ✓ Continue your upload
+
+			.progress
+				.numbers
+					| Uploaded
+					strong: span.done
+					|  /
+					strong: span.total
+					| ... (
+					span.percentage
+					| %)
+				.wait Just a moment...
+				.bar: .bar-inner
+
+			#uploadError
+				h3 Oops! Something went wrong.
+				p.message Please reload the page and try again.
+
+			.info
+					p What you get:
+					ul
+						li Your PDF hosted permanently, ad-free.
+						li Share-able page with PDF viewer (using <a href="https://mozilla.github.io/pdf.js/">pdf.js</a>).
+						li Embeddable version of the viewer.
+						li Original PDF can be downloaded by anybody, without registration.
+						li All public PDFs mirrored to the <a href="https://archive.org/details/pdfymirrors">Internet Archive</a> for preservation.
+					p
+						="Please don't upload warez! "
+						a(href="/tos") Terms of Service here.
+
+	.latest
+		h2 Latest public documents
+		for document in latestDocuments
+			a.document(href="/d/#{document.SlugId}")
+				img(src="/static/thumbs/#{document.SlugId}.png", title="#{document.OriginalFilename}")
+		a.gallery-link(href="/gallery") ... or view more public documents in the gallery &raquo;
+		.clear

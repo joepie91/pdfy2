@@ -1,0 +1,50 @@
+extends ../layout
+
+block content-nowrap
+	.admin.admin-search
+		+form(action="/admin/documents", method="post")
+			.wrapper
+				h2 Search results
+
+				p
+					| With selected:
+
+				p
+					button.pure-button.form-popup(type="button", data-popup="abuse") Remove (abuse)
+					button.pure-button(type="submit", name="action", value="restore") Restore (abuse)
+					button.pure-button(type="submit", name="action", value="public") Make public
+					button.pure-button(type="submit", name="action", value="private") Make private
+					button.pure-button(type="submit", name="action", value="thumbnail") Re-queue thumbnail
+					button.pure-button(type="submit", name="action", value="mirror") Re-queue IA mirror
+					.popup.popup-abuse.pure-form.pure-form-inline
+						label Reason (optional):
+						input(type="text", name="abuseReason")
+						button.pure-button(type="submit", name="action", value="abuse") Confirm
+
+			section.side-margins
+				table
+					tr
+						th: input.checkAll(type="checkbox")
+						th Slug
+						th Public
+						th Original filename
+						th Views
+						th Upload date
+						th Mirrored
+						th Thumbnailed
+						th Removed
+
+					for result in results
+						tr
+							td: input(type="checkbox", name="document[#{result.Id}]", value="1")
+							td: a(href="/d/#{result.SlugId}")= result.SlugId
+							td= !!(result.Public)
+							td= result.OriginalFilename
+							td= result.Views
+							td= result.Uploaded
+							td= !!(result.Mirrored)
+							td= !!(result.Thumbnailed)
+							td
+								=!!(result.Disabled)
+								if !!(result.Disabled)
+									|  (#{result.DisabledReason || ""})

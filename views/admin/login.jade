@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+	.admin
+		+form.pure-form.pure-form-aligned(method="post", action="/admin/login")
+			.pure-control-group
+				label Username
+				input(type="text", name="username")
+
+			.pure-control-group
+				label Password
+				input(type="password", name="password")
+
+			.pure-control-group
+				label
+				button.pure-button(type="submit") Login

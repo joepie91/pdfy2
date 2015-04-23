@@ -1,0 +1,41 @@
+extends root
+
+mixin metaProp(name, content)
+	meta(itemprop=name, content=content)
+
+mixin twitterProp(name, content)
+	meta(name="twitter:#{name}", content=content)
+
+mixin facebookProp(name, content)
+	meta(name="og:#{name}", content=content)
+
+block docContents
+	html(itemscope, itemtype="http://schema.org/CreativeWork")
+		head
+			title View #{document.OriginalFilename} - PDFy - Instant PDF Host
+			+defaultHead
+
+			meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+			+metaProp("name", document.OriginalFilename)
+			+metaProp("image", "https://pdf.yt/static/thumbs/#{document.SlugId}")
+
+			+twitterProp("card", "summary")
+			+twitterProp("title", document.OriginalFilename)
+			+twitterProp("description", "Read and download #{document.OriginalFilename} for free!")
+			+twitterProp("image:src", "https://pdf.yt/static/thumbs/#{document.SlugId}")
+
+			+facebookProp("type", "website")
+			+facebookProp("title", document.OriginalFilename)
+			+facebookProp("url", "https://pdf.yt/d/#{document.SlugId}")
+			+facebookProp("site_name", "PDFy")
+			+facebookProp("image", "https://pdf.yt/static/thumbs/#{document.SlugId}")
+
+			if !document.Public
+				// Keep Google and friends from indexing this document (hopefully), if they've somehow run across it...
+				meta(name="robots", content="noindex")
+
+			block extra-head
+		body(class=conditionalClasses(["full-screen"], {"announcement-visible": announcementVisible}))
+			+defaultBody
+
+			block content

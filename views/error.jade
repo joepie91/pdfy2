@@ -1,0 +1,14 @@
+extends layout
+
+block pageTitle
+	= message
+
+block content
+	.error
+		h1= message
+		h2= error.status || error.subMessage
+		if error.stack
+			div.error-stack
+				if abuseReason
+					strong= "Reason: "
+				!= htmlStack || error.stack

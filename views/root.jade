@@ -1,0 +1,39 @@
+mixin stylesheet(path)
+	link(rel="stylesheet", href=path)
+
+mixin script(path)
+	script(src=path)
+
+mixin csrfToken
+	input(type="hidden", name="_csrf", value=csrfToken)
+
+mixin form
+	form&attributes(attributes)
+		+csrfToken
+		block
+
+mixin defaultHead
+	+stylesheet("//fonts.googleapis.com/css?family=PT+Sans:400,700")
+	+stylesheet("/css/pure-min.css")
+	+stylesheet("/css/style.css")
+	+script("/js/bundle.js")
+
+mixin defaultBody
+	// Top announcement bar
+	if announcementVisible && !compactLayout
+		.announce
+			= announcementText + " "
+			a(href=announcementLink): strong= announcementLinkText
+
+	// Header
+	.header: .wrapper
+		if !compactLayout
+			a.pure-button.button-upload(href="/") Upload a PDF
+			a.pure-button.button-lite(href="/abuse") Abuse
+			a.pure-button.button-lite.hide-x-small(href="/faq") FAQ
+			a.pure-button.button-lite.hide-x-small(href="/blog") Blog
+			a.pure-button.button-lite(href="/donate") Donate
+		h1: a(href="/") PDFy
+
+doctype html
+block docContents

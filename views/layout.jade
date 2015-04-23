@@ -1,0 +1,25 @@
+extends root
+
+block docContents
+	html
+		head
+			title
+				block pageTitle
+				= " - PDFy - Instant PDF Host"
+			+defaultHead
+		body(class=conditionalClasses([], {"announcement-visible": announcementVisible}))
+			block body
+				+defaultBody
+
+				block subtext
+					if !compactLayout
+						// The introduction text
+						.subtext: .wrapper
+							p
+								strong Why does PDFy exist?
+								|  I got sick of documents getting locked up behind login walls of services like Scribd. PDFy exists to offer a place where anybody can instantly upload and share a PDF, much like Imgur does for images. PDFy is free, ad-free, and non-commercial.
+
+				// The actual page contents
+				block content-nowrap
+					.contents: .wrapper
+						block content

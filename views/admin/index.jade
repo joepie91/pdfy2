@@ -1,0 +1,101 @@
+extends ../layout
+
+block content
+	.admin
+		+form(method="post", action="/admin/logout")
+			button.pure-button(type="submit") Log out
+
+		section
+			h3 Dynamic configuration variables
+
+			+form(action="/admin/variables", method="post")
+				table
+					tr
+						th Key
+						th Current value
+						th New value
+					for variable in variables
+						tr
+							td= variable.key
+							td= variable.value
+							td
+								if variable.type == "string"
+									input(name=variable.key, value=variable.value)
+								else if variable.type == "number"
+									input(name=variable.key, type="number", value=variable.value)
+								else if variable.type == "text"
+									textarea(name=variable.key)= variable.value
+								else if variable.type == "boolean"
+									input(name=variable.key, type="checkbox", checked=variable.value)
+					tr
+						td(colspan=3)
+							button.save-button(type="submit") Save
+
+
+		section
+			h3 Tasks
+
+			h4 Running
+
+			ul
+				for taskType in taskTypes
+					li <strong>#{taskType.name}:</strong> #{taskType.running}
+
+			h4 Queued
+
+			ul
+				for taskType in taskTypes
+					li <strong>#{taskType.name}:</strong> #{taskType.queued}
+
+			h4 Failed
+
+			ul
+				for taskType in taskTypes
+					li <strong>#{taskType.name}:</strong> #{taskType.failed}
+
+			h4 Completed
+
+			ul
+				for taskType in taskTypes
+					li <strong>#{taskType.name}:</strong> #{taskType.completed}
+
+			h4 Requeue tasks
+
+			p nope.avi
+
+		section
+			h3 Document search
+
+			+form(action="/admin/search", method="post")
+				h4 By slug
+				input(type="hidden", name="field", value="slug")
+				input(name="query")
+				button(type="submit") Search
+
+			+form(action="/admin/search", method="post")
+				h4 By (partial) filename
+				input(type="hidden", name="field", value="filename")
+				input(name="query")
+				button(type="submit") Search
+
+		section
+			h3 Blog
+
+			p: a.pure-button(href="/admin/blog/new") Create new post
+
+			table
+				tr
+					th Title
+					th Created
+					th Edited
+					th
+				for post in blogPosts
+					tr
+						td: a(href="/blog/#{post.Id}/#{post.Slug}")= post.Title
+						td= shortDate(post.Posted)
+						td= shortDate(post.Edited)
+						td
+							a.pure-button.pure-button-small(href="/admin/blog/edit/#{post.Id}") Edit
+							a.pure-button.pure-button-small(href="/admin/blog/delete/#{post.Id}") Remove
+				else
+					tr: td(colspan=4) None yet!

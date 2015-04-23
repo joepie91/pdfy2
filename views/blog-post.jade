@@ -1,0 +1,10 @@
+extends layout
+
+block pageTitle
+	| #{post.Title} - Blog
+
+block content
+	.blog-post
+		h2 The PDFy Blog :: #{post.Title}
+		section
+			.post!= post.HTML

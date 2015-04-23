@@ -1,0 +1,69 @@
+extends layout-document
+
+block extra-head
+	script.
+		var embed_template = '<iframe src="//pdf.yt/d/#{document.SlugId}/embed?sparse={SPARSE}&donation_link={DONATION}" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>';
+
+block content
+	.viewer-contents
+		.viewer-wrapper
+			iframe.viewer(allowfullscreen, src="/d/#{document.SlugId}/embed/?sparse=1&footer=0")
+
+		.bottombar
+			.header-wrapper: h2= document.OriginalFilename
+			.tools
+				.views #{document.Views} views
+				.download
+					="Download as: "
+					a.pure-button.inline(href="/d/#{document.SlugId}/download") PDF
+				.embed
+					="Embed: "
+					input.autoselect.embed_code(value='<iframe src="//pdf.yt/d/#{document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>')
+
+		.sidebar
+			.donation-box
+				// h3 PDFy needs your donations!
+				h3 PDFy donations for #{currentMonth}:
+
+				.progress-bar
+					.progress-text <strong>€#{donationTotal}</strong> / €#{donationGoal}
+					.progress-fill(style="width: #{(donationTotal / donationGoal) * 100}%")
+
+				.donation-buttons
+					a.pure-button(href="/donate") Donate!
+					a(href="/donate/faq") More info?
+
+			.actual-contents
+				h2(title=document.OriginalFilename)!= makeBreakable(document.OriginalFilename)
+
+				.download-box
+					h3 Download this document
+					p Free, no registration necessary!
+
+					p.formats
+						="Format: "
+						a.pure-button.inline(href="/d/#{document.SlugId}/download") PDF
+						if document.Mirrored
+							a.pure-button.inline(href="https://archive.org/details/pdfy-#{document.SlugId}", target="_blank")
+								img.icon(src="/images/ia.png")
+								| Mirror
+
+				.embed-box
+					h3 Embed this document
+
+					textarea.autoselect.embed_code <iframe src="//pdf.yt/d/#{document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>
+
+					.toolbar-settings
+						input#show_toolbar(type="checkbox", name="show_toolbar", checked)
+						label(for="show_toolbar") Show toolbar
+
+						input#show_donation(type="checkbox", name="show_donation")
+						label(for="show_donation") Show donation link
+
+				.link-box
+					h3 Link to this document
+
+					input.autoselect.link_code(type="text", value="https://pdf.yt/d/#{document.SlugId}")
+
+				.stats
+					p #{document.Views} views since #{document.Uploaded}

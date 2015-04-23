@@ -1,0 +1,72 @@
+extends layout
+
+block pageTitle
+	| Reporting abuse
+
+block content
+	h2 Reporting abuse
+
+	p PDFy does not allow uploads of 'warez' (unauthorized distribution of copyrighted materials), as outlined in the <a href="/tos">Terms of Service</a>. If you wish to file a complaint regarding this, or for another reason, please <strong>read this page carefully</strong>.
+
+	section
+		// Mistaken uploads
+		h3 Mistaken uploads
+
+		p Mistakes happen, and you may have uploaded a document you didn't intend to upload. If this happens, please e-mail us at <a href="mailto:abusemail@cryto.net">abusemail@cryto.net</a> with the URL of the document, and make sure to include some kind of evidence that you are the original uploader. Examples of valid evidence are:
+
+		ul
+			li Sending the e-mail from an address that is listed in the document as an author.
+			li Sending the e-mail from an address that can be easily proven to belong to the author of the document.
+			li Sending us a source document (if applicable), eg. the .doc file that you generated the PDF from. Only the author would have this.
+			li The IP address of the computer/network that you uploaded the document from - please only do this as a last resort, we have to manually cross-reference IPs (a time-intensive job), because we do not explicitly keep track of what IP uploads what document.
+
+		p There are two possible solutions for this, please make sure to tell us which you prefer:
+
+		ul
+			li Making the (public) document unlisted - it will remain at its original URL, but search engines will remove it from their indexes in ~48 hours, it will no longer be shown in the gallery, and the Internet Archive mirror will be made unavailable.
+			li Removing the document entirely - this is irreversible, and your document will no longer be available at its original URL. Any embeds will also cease to work.
+
+	section
+		// Copyright claims
+		h3 Copyright claims
+
+		p
+			| Copyright claims may be directed to <a href='mailto:abusemail@cryto.net'>abusemail@cryto.net</a>. Please ensure that your claim includes the following information, at the very least.
+
+		strong Copyright claims that do not include the following information, will not be processed.
+
+		ul
+			li The URL of the document in question (the document name is <em>not</em> sufficient!)
+			li Some kind of evidence that you are the copyright holder of the document, or authorized to act on their behalf - for example, an e-mail address at the domain of the publisher, an e-mail address that can be publicly tied to your work, or filing documents from a copyright office.
+
+		p
+			strong All copyright claims must be submitted in either English or Dutch!
+			|  Unfortunately, we are unable to process claims in other languages. 'Broken' English is generally okay.
+
+		p Copyright claims are generally followed up on within 24 hours, and (if your complaint is valid), we will also ensure that the mirror at the Internet Archive is made unavailable, if it exists.
+
+		p Please keep in mind that PDFy is a small and non-commercial operation - we are unable to respond to e-mails 24/7. Please also refrain from abusemailing our hosting providers or domain registrar - we respond to all complaints.
+
+		p <strong>If you are not the copyright holder or authorized to act on their behalf, we will not process your complaint.</strong> As PDFy is also used by publishers and we do not keep track of who uploads what documents, we are unable to determine whether the distribution of any given document is authorized or not. If you believe a document to be infringing, please notify the publisher or copyright holder - they will be able to determine whether distribution was authorized, and they can notify us if it's not.
+
+	section
+		// Other legal
+		h3 Other legal reasons
+
+		p If you have evidence of a document on PDFy being illegal to distribute, this can be grounds for removal.
+
+		strong This only applies if the distribution is illegal in the jurisdiction(s) that apply to PDFy.
+
+		p Another potentially valid reason for removal is defamation; however, removal will only take place if there is legal evidence (eg. a court ruling) stating that the document or its contents are defamatory. Don't bother sending us documentation of settlements that we are not a party to - these do not establish defamation, and will not be processed.
+
+		p Please make sure to include at least the following information:
+
+		ul
+			li The URL of the document in question (the document name is <em>not</em> sufficient!)
+			li An exact description of the reason for removal.
+			li Legal evidence of removal being required.
+
+		p We will <em>not</em> remove documents because they are 'offensive', don't even bother. Documents are only removed if there are valid legal grounds for doing so.
+
+		p You can direct your abusemail at <a href='mailto:abusemail@cryto.net'>abusemail@cryto.net</a>.
+

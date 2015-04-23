@@ -1,0 +1,54 @@
+extends layout
+
+block pageTitle
+	| Donation FAQ
+
+block subtext
+
+block content
+	a.return-button.floating.pure-button(href="/donate", data-min-top=16) Return to donation page
+
+	h2 Donation FAQ
+
+	section
+		h3 Why are you asking for donations?
+		p PDFy is a non-commercial and advertisement-free PDF hosting service, and our income entirely depends on donations. However, our servers and other expenses are not free, and we need your help to pay for them!
+
+	section
+		h3 Does that mean that PDFy will go away soon?
+		p No. While donations are very much needed, PDFy is run on a shoestring budget, and there's a buffer to account for short periods where very few donations are made. Because the hosting (and donations) for PDFy are pooled with other projects of the <a href="http://cryto.net/" target="_blank">Cryto Coding Collective</a>, there's some breathing room. If PDFy ever needs to be shut down because of a lack of funds, we'll make sure to announce it well in advance.
+
+	section
+		h3 But how do I make sure my documents aren't lost?
+		p While you should really always keep a backup copy of documents (never fully trust online services, whether commercial or not!), we also automatically <a href="https://archive.org/details/pdfymirrors" target="_blank">mirror</a> all public documents to the Internet Archive. If PDFy ever shuts down, they will permanently retain a copy of all these documents.
+
+	section
+		h3 Does my money go directly to PDFy?
+		p Yes and no. PDFy is part of the <a href="http://cryto.net/" target="_blank">Cryto Coding Collective</a>, and shares infrastructure with a number of other Cryto projects. Donations are pooled and used for all the Cryto projects together, all of which are non-commercial and strictly advertisement-free. This pooling of resources keeps costs down, and lets us use your donations more effectively!
+		p The biggest expense right now are the living expenses of PDFy's primary developer and administrator (me). I live entirely off donations for my projects, which means I can work on PDFy and <a href="http://cryto.net/~joepie91/projectlist" target="_blank">other projects</a> more than full-time. While I live very frugally (some ~700 euro a month in total living and hosting expenses), it's not quite zero :)
+
+	section
+		h3 What is your donation goal for?
+		p The donation goal (currently €#{donationGoal} a month) is a somewhat arbitrary amount. It covers part of the infrastructure costs for PDFy and other <a href="http://cryto.net/" target="_blank">Cryto Coding Collective</a> projects. The idea is to have a realistic goal - if the goal is reached frequently, it may be increased in the future to cover a larger part of expenses.
+		p Donations are always welcome and needed, even if the goal has been reached already!
+
+	section
+		h3 What can I use to donate?
+		p We accept pretty much anything - Bitcoin, PayPal, Gratipay, SEPA transfers, gift cards, and so on. For donations through a credit card, please use PayPal or Gratipay. For a full list of the accepted donation methods, head over to the <a href="/donate">donation page</a>.
+
+	section
+		h3 Can I set up a recurring donation (subscription)?
+		p Yes! Simply select the "Weekly or Monthly" option on the donation page, select a payment method, and follow the instructions. Automatically recurring transactions are currently supported via PayPal and Gratipay. If you wish to use SEPA, you will have to schedule a periodic transaction with your bank - it is not yet possible to handle SEPA transfers automatically. The SEPA bank details can be found under the "One-Time" donation information.
+
+	section
+		h3 I donated, but the counter isn't increasing. What gives?
+		p The donation counter is not yet fully automated; we manually update the donation progress every day. If you are donating with Gratipay, please make sure to <a href="mailto:donations@cryto.net">let us know about it</a> - because Gratipay contributions are made to a person or organization rather than a specific project, we can't tell which contributions are for PDFy.
+
+	section
+		h3 I'd like to donate through another method.
+		p Simply <a href="mailto:donations@cryto.net">send us an e-mail</a>, and tell us how you'd like to donate!
+		p Please do keep in mind that altcoins are not currently accepted - it's not feasible for us to run a different wallet for every altcoin in existence. Bitcoins are accepted, though!
+
+	section
+		h3 I have another question that isn't listed here.
+		p Feel free to <a href="mailto:donations@cryto.net">e-mail us</a>! We'll generally get back to you in under 24 hours.

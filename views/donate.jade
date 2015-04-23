@@ -1,0 +1,329 @@
+extends layout
+
+block pageTitle
+	| Donate
+
+mixin donationType(value, label)
+	.option&attributes(attributes)
+		label(for="type_#{value}")= label
+		input(id="type_#{value}", type="radio", value=value, name="type-type")
+
+mixin donationAmount(amount)
+	.option&attributes(attributes)
+		label(for="amount_#{amount}")
+			strong €#{amount}
+			span.exchange-rate  (~$#{Math.round(amount * rates.USD * 100) / 100})
+		input(id="amount_#{amount}", type="radio", value=amount, name="type-amount")
+
+mixin donationMethod(value)
+	.option.payment-method&attributes(attributes)
+		block
+		input(id="method_#{value}", type="radio", value=value, name="type-method")
+
+block subtext
+
+block content
+	div.donation-page
+		h2 Make a donation to PDFy!
+
+		p The internet of today is a minefield of trials, advertisements, shady business models like selling your personal data, and completely unusable websites - all designed purely to turn you into a source of profit. <strong>PDFy exists to change that</strong>, at least for uploading and sharing documents. It is and always will be completely free to use, free of advertisements, and non-commercial.
+
+		p I dedicate all of my time (yes, really!) to building PDFy and <a href="http://cryto.net/~joepie91">other non-commercial services like it</a>; however, that means I have no source of income aside from your donations, and unfortunately I still have bills to pay - and that is why I need your help!
+
+		p By making a recurring or one-time donation - <strong>€5, €10, €25</strong>, any amount is welcome - you help keep PDFy and other projects running.
+
+		p Have any questions about donating to PDFy? Feel free to <a href="/donate/faq">read the FAQ</a>, or <a href="mailto:donations@cryto.net">send us an e-mail</a>!
+
+		.progress-container
+			label Our goal for #{currentMonth}:
+			.progress-bar
+				.progress-text <strong>€#{donationTotal}</strong> / €#{donationGoal}
+				.progress-fill(style="width: #{(donationTotal / donationGoal) * 100}%")
+
+		.js-unavailable
+			section
+				p Unfortunately, it appears you have Javascript disabled, so we can't show you the fancy version of our donation page.
+				p You are, of course, still welcome to donate! The buttons and/or details needed to do so, are listed below.
+
+				h3 PayPal
+
+				form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top" style="display: inline-block")
+					input(type="hidden", name="cmd", value="_donations")
+					input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+					input(type="hidden", name="lc", value="US")
+					input(type="hidden", name="item_name", value="PDFy donation")
+					input(type="hidden", name="currency_code", value="EUR")
+					input(type="hidden", name="no_note", value="0")
+					input(type="hidden", name="cn", value="Notes:")
+					input(type="hidden", name="no_shipping", value="1")
+					input(type="hidden", name="rm", value="1")
+					input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+					input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+					input(type="hidden", name="bn", value="PP-DonationsBF:btn_donateCC_LG.gif:NonHosted")
+					button.pure-button.paypal-button(type="submit", name="submit")
+						img(src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif")
+						div(style="padding-top: 12px"): label (one-time)
+
+				// until an input box can be added for the amount...
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top" style="display: inline-block")
+						input(type="hidden", name="cmd", value="_xclick-subscriptions")
+						input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+						input(type="hidden", name="lc", value="US")
+						input(type="hidden", name="item_name", value="PDFy donation")
+						input(type="hidden", name="p3", value="1")
+						input(type="hidden", name="t3", value="W")
+						input(type="hidden", name="currency_code", value="EUR")
+						input(type="hidden", name="no_note", value="1")
+						input(type="hidden", name="src", value="1")
+						input(type="hidden", name="no_shipping", value="1")
+						input(type="hidden", name="rm", value="1")
+						input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+						input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+						input(type="hidden", name="bn", value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHosted")
+						button.pure-button.paypal-button(type="submit", name="submit")
+							img(src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif")
+							div(style="padding-top: 12px"): label (weekly)
+
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top" style="display: inline-block")
+						input(type="hidden", name="cmd", value="_xclick-subscriptions")
+						input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+						input(type="hidden", name="lc", value="US")
+						input(type="hidden", name="item_name", value="PDFy donation")
+						input(type="hidden", name="p3", value="1")
+						input(type="hidden", name="t3", value="M")
+						input(type="hidden", name="currency_code", value="EUR")
+						input(type="hidden", name="no_note", value="1")
+						input(type="hidden", name="src", value="1")
+						input(type="hidden", name="no_shipping", value="1")
+						input(type="hidden", name="rm", value="1")
+						input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+						input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+						input(type="hidden", name="bn", value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHosted")
+						button.pure-button.paypal-button(type="submit", name="submit")
+							img(src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif")
+							div(style="padding-top: 12px"): label (monthly)
+
+				p
+
+				h3 Bitcoin
+
+				p Address:
+				pre= bitcoinAddress
+
+				h3 Gratipay
+
+				p: a(href="https://gratipay.com/joepie91") Click: <img src="//img.shields.io/gratipay/joepie91.svg">
+
+				h3 Flattr
+
+				p: a(href="https://flattr.com/submit/auto?user_id=joepie91&url=https%3A%2F%2Fpdf.yt%2F")
+					img(src="//button.flattr.com/flattr-badge-large.png")
+
+				h3 Other methods
+
+				p Almost any kind of donation (method) is welcome - SEPA transfers, gift cards, hardware, cash-in-mail, you name it. If you'd like to donate using a method not listed here, feel free to e-mail us at <a href="mailto:donations@cryto.net">donations@cryto.net</a>!
+
+				p Please note that altcoins are not currenty accepted, as running a lot of different cryptocurrency wallets is not feasible. If you wish to donate using cryptocurrency, you can use the Bitcoin option - there are various exchangers that exchange between Bitcoin and other cryptocurrencies.
+
+		.js-available
+			section.types
+				h3 1. Pick your donation type
+
+				+donationType("one-time", "One-Time")(data-type="once")
+				+donationType("recurring", "Weekly or Monthly")(data-type="recurring")
+
+			section.methods
+				h3 2. Select a payment method
+
+				+donationMethod("paypal")(data-set-price=true, data-name="paypal", data-type="once")
+					img(src="/images/logos/paypal.png")
+					label.fixed (+ credit cards)
+
+				+donationMethod("bitcoin")(data-set-price=true, data-name="bitcoin", data-type="once")
+					img(src="/images/logos/bitcoin.png")
+
+				+donationMethod("flattr")(data-set-price=false, data-name="flattr", data-type="once")
+					img(src="/images/logos/flattr.png")
+
+				+donationMethod("sepa")(data-set-price=false, data-name="sepa", data-type="once")
+					img(src="/images/logos/sepa.png")
+					label.fixed (bank transfer)
+
+				+donationMethod("cash")(data-set-price=false, data-name="cash", data-type="once")
+					label.logo Cash-in-mail
+
+				+donationMethod("other")(data-set-price=false, data-name="other", data-type="once")
+					label.logo Other...
+
+				+donationMethod("paypal-monthly")(data-set-price=true, data-name="paypal-monthly", data-type="recurring")
+					img(src="/images/logos/paypal.png")
+					label.fixed (monthly)
+
+				+donationMethod("paypal-weekly")(data-set-price=true, data-name="paypal-weekly", data-type="recurring")
+					img(src="/images/logos/paypal.png")
+					label.fixed (weekly)
+
+				+donationMethod("gratipay")(data-set-price=false, data-name="gratipay", data-type="recurring")
+					img(src="/images/logos/gratipay.png")
+					label.fixed (weekly)
+
+			section.amount
+				h3 3. Pick an amount
+
+				+donationAmount(5)
+				+donationAmount(10)
+				+donationAmount(25)
+				+donationAmount(50)
+				+donationAmount(100)
+				+donationAmount(250)
+				+donationAmount(1000)
+
+				.option
+					label(for="amount_custom")
+						strong Custom: €#{amount}
+						input(id="custom_amount_input", type="number", name="custom-amount")
+					input(id="amount_custom", type="radio", name="type-amount")
+
+			section.instructions
+				h3.set-amount 4. Make your donation
+				h3.no-set-amount 3. Make your donation
+
+				.method.method-bitcoin
+					.loaded-content
+						a.bip21(href="#"): img.bip21-qr(src="")
+
+						p Please send <strong class="btc-amount">...</strong> BTC to the following address:
+
+						pre= bitcoinAddress
+
+						p You may also send any other amount.
+
+					.loading-message
+						p One moment, calculating...
+
+				.method.method-sepa
+					p: strong Please do not send international (non-SEPA) bank wires if you can at all avoid it! Fees on international bank wires are extremely high. SEPA transfers, however, are perfectly okay.
+
+					p You may send any donations through a SEPA transfer to the following account:
+
+					ul
+						li <strong>Name:</strong> <span class="decodable">UyBTTE9PVFdFRw==</span>
+						li <strong>IBAN:</strong> <span class="decodable">TkwzM0FCTkEwNDYzNTEyMTM4</span>
+
+					p If none of the other donation methods are feasible for you, and you wish to send an international (non-SEPA) bank wire, you will need the following BIC: <strong class="decodable">QUJOQU5MMkE=</strong>. Be aware that a considerable chunk of your donation will be lost to fees; anywhere from 10% to 30%.
+
+					p Some banks require that you specify the full name and address of the recipient. If this is the case, you can provide the following information:
+
+					address: pre.decodable.
+						U3ZlbiBTbG9vdHdlZwpLb25pbmdpbiBXaWxoZWxtaW5hc3RyYWF0IDQxCjMzMTFMTSBEb3JkcmVjaHQKVGhlIE5ldGhlcmxhbmRz
+
+				.method.method-cash
+					p: strong Please only use this method if you have absolutely no other options! It is easy for your donation to get lost in the mail.
+
+					p Please take the following precautions to increase the chances of correct delivery, and to prevent theft:
+
+					ul
+						li Ensure that your local postal service allows you to send cash through the mail.
+						li Insert the donation in an envelope between two sheets of regular paper or thin cardboard, to obscure it.
+						li Please do not send coins - these are too easy to identify for mail handlers.
+						li For larger donations, please use registered (and insured) mail. Signature requirements are okay.
+
+					p You can send your donation to the following address:
+
+					address: pre.decodable.
+						U3ZlbiBTbG9vdHdlZwpLb25pbmdpbiBXaWxoZWxtaW5hc3RyYWF0IDQxCjMzMTFMTSBEb3JkcmVjaHQKVGhlIE5ldGhlcmxhbmRz
+
+				.method.method-other
+					p Almost any kind of donation is welcome - gift cards, hardware, you name it. If you'd like to donate using a method not listed here, feel free to e-mail us at <a href="mailto:donations@cryto.net">donations@cryto.net</a>!
+
+					p Please note that altcoins are not currenty accepted, as running a lot of different cryptocurrency wallets is not feasible. If you wish to donate using cryptocurrency, you can use the Bitcoin option - there are various exchangers that exchange between Bitcoin and other cryptocurrencies.
+
+				.method.method-paypal
+
+					p Simply click the button below. You will be asked by PayPal to confirm your <strong>one-time</strong> donation.
+
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top")
+						input(type="hidden", name="cmd", value="_donations")
+						input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+						input(type="hidden", name="lc", value="US")
+						input(type="hidden", name="item_name", value="PDFy donation")
+						input.amount(type="hidden", name="amount", value="10.00")
+						input(type="hidden", name="currency_code", value="EUR")
+						input(type="hidden", name="no_note", value="0")
+						input(type="hidden", name="cn", value="Notes:")
+						input(type="hidden", name="no_shipping", value="1")
+						input(type="hidden", name="rm", value="1")
+						input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+						input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+						input(type="hidden", name="bn", value="PP-DonationsBF:btn_donateCC_LG.gif:NonHosted")
+						button.pure-button.paypal-button(type="submit", name="submit")
+							img(src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif")
+
+				.method.method-paypal-weekly
+
+					p Simply click the button below. You will be asked by PayPal to confirm your <strong>weekly</strong> donation.
+
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top")
+						input(type="hidden", name="cmd", value="_xclick-subscriptions")
+						input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+						input(type="hidden", name="lc", value="US")
+						input(type="hidden", name="item_name", value="PDFy donation")
+						input.amount(type="hidden", name="a3", value="10.00")
+						input(type="hidden", name="p3", value="1")
+						input(type="hidden", name="t3", value="W")
+						input(type="hidden", name="currency_code", value="EUR")
+						input(type="hidden", name="no_note", value="1")
+						input(type="hidden", name="src", value="1")
+						input(type="hidden", name="no_shipping", value="1")
+						input(type="hidden", name="rm", value="1")
+						input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+						input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+						input(type="hidden", name="bn", value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHosted")
+						button.pure-button.paypal-button(type="submit", name="submit")
+							img(src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif")
+
+				.method.method-paypal-monthly
+
+					p Simply click the button below. You will be asked by PayPal to confirm your <strong>monthly</strong> donation.
+
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_top")
+						input(type="hidden", name="cmd", value="_xclick-subscriptions")
+						input(type="hidden", name="business", value="AQ9A6XVWUWHCC")
+						input(type="hidden", name="lc", value="US")
+						input(type="hidden", name="item_name", value="PDFy donation")
+						input.amount(type="hidden", name="a3", value="10.00")
+						input(type="hidden", name="p3", value="1")
+						input(type="hidden", name="t3", value="M")
+						input(type="hidden", name="currency_code", value="EUR")
+						input(type="hidden", name="no_note", value="1")
+						input(type="hidden", name="src", value="1")
+						input(type="hidden", name="no_shipping", value="1")
+						input(type="hidden", name="rm", value="1")
+						input(type="hidden", name="return", value="https://pdf.yt/donate/thanks")
+						input(type="hidden", name="cancel_return", value="https://pdf.yt/donate")
+						input(type="hidden", name="bn", value="PP-SubscriptionsBF:btn_subscribeCC_LG.gif:NonHosted")
+						button.pure-button.paypal-button(type="submit", name="submit")
+							img(src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif")
+
+				.method.method-flattr
+
+					p Simply click the <strong>"Flattr"</strong> button below. You will need a Flattr account.
+
+					script#fbopyir.
+						(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=joepie91&url=https%3A%2F%2Fpdf.yt%2F';f.title='Flattr';f.height=62;f.width=55;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fbopyir');
+
+				.method.method-gratipay
+
+					p Follow these instructions to donate through Gratipay:
+
+					ol
+						li Click the green text on the button below (or click <a href="https://gratipay.com/joepie91/">here</a>). You will be redirected to the Gratipay website.
+						li If necessary, log in to Gratipay.
+						li On the Gratipay website, look for a yellow button on the left that says <strong>"Give to joepie91"</strong>, and click it.
+
+					script(data-gratipay-username="joepie91", src="//grtp.co/v1.js")
+
+				.placeholder
+					p Please select a payment method first. The instructions for making your donation will then appear here.
+
+				p.thank-you Thank you for your support!

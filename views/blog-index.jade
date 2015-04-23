@@ -1,0 +1,18 @@
+extends layout
+
+block pageTitle
+	| Blog
+
+block content
+	.blog-index
+		h2 The PDFy Blog!
+		section
+			h3 Latest posts
+			for post in posts
+				.post
+					a(href="/blog/#{post.Id}/#{post.Slug}")
+						span.date= post.Posted
+						| &raquo;
+						span.title= post.Title
+			else
+				.post None yet!

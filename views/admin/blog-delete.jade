@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	.admin
+		+form.pure-form.pure-form-stacked(method="post", action="/admin/blog/delete/#{post.Id}")
+			p Are you sure you want to delete this post?
+			p: strong= post.Title
+			button.pure-button.submit Yep, delete
+
