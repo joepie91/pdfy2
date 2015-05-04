@@ -3,9 +3,9 @@
 app = require('../app')
 debug = require('debug')('pdfy:server')
 http = require('http')
-https = require("https")
-config = require "../config.json"
-fs = require "fs"
+https = require('https')
+config = require('../config.json')
+fs = require('fs')
 
 normalizePort = (val) ->
 	port = parseInt val, 10
