@@ -21,5 +21,8 @@ module.exports = ->
 				lastRates = rates
 				lastRateCheck = Date.now()
 				Promise.resolve rates
+			.catch (err) ->
+				# API is down. FIXME: Log this error.
+				Promise.resolve lastRates
 		else
 			Promise.resolve lastRates

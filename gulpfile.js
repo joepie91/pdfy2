@@ -19,16 +19,6 @@ task = {
 	"source": ["public/**/*.coffee", "routes/**/*.coffee", "models/**/*.coffee", "tasks/**/*.coffee", "app.coffee", "util.coffee", "migrate.coffee", "db.coffee"]
 }
 
-/*
-gulp.task('coffee', function() {
-	return gulp.src(task.source, {base: "."})
-		.pipe(plumber())
-		.pipe(cache("coffee"))
-		.pipe(coffee({bare: true}).on('error', gutil.log)).on('data', gutil.log)
-		.pipe(remember("coffee"))
-		.pipe(gulp.dest("."));
-});*/
-
 gulp.task('webpack', function(){
 	return gulp.src("frontend/index.coffee")
 		.pipe(webpack({
@@ -68,9 +58,7 @@ gulp.task('watch', function () {
 	livereload.listen();
 	gulp.watch(['./**/*.css', 'views/**/*.jade', 'package.json', "./public/js/**/*.js"]).on('change', livereload.changed);
 	gulp.watch(["./public/css/style.scss"], ["sass"])
-	//gulp.watch(task.source, ['coffee']);
-	// theseus disabled for now, it was screwing with my tracebacks
-	//nodemon({script: "./bin/www", ext: "js", nodeArgs: ['/usr/bin/node-theseus']}).on("start", checkServerUp);
+	
 	nodemon({
 		script: "./bin/www.coffee",
 		ext: "coffee",
@@ -82,4 +70,4 @@ gulp.task('watch', function () {
 	});
 });
 
-gulp.task('default', [/*'coffee',*/ 'sass', 'watch', 'webpack']);
+gulp.task('default', ['sass', 'watch', 'webpack']);
