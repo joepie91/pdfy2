@@ -20,14 +20,16 @@ $ ->
 			block.find(".loaded-content").hide()
 
 			$.get "/donate/convert/btc?amount=#{selectedAmount}", (btcAmount) ->
-				$.get "/donate/bip21?amount=#{btcAmount}", (uri) ->
+				roundedAmount = Math.round(btcAmount * 100000000) / 100000000
+				
+				$.get "/donate/bip21?amount=#{roundedAmount}", (uri) ->
 					$(".bip21").attr("href", uri)
 
 					block.find(".loading-message").hide()
 					block.find(".loaded-content").show()
 
-				$(".bip21-qr").attr("src", "/donate/bip21/qr?amount=#{btcAmount}")
-				$(".btc-amount").text(Math.round(btcAmount * 100000000) / 100000000)
+				$(".bip21-qr").attr("src", "/donate/bip21/qr?amount=#{roundedAmount}")
+				$(".btc-amount").text(roundedAmount)
 
 	setCustomValue = (value) ->
 		value = parseFloat(value)
