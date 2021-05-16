@@ -2,7 +2,7 @@ Promise = require "bluebird"
 router = require("express-promise-router")()
 moment = require "moment"
 slug = require "slug"
-scrypt = require "scrypt-for-humans"
+scrypt = require "scrypt-kdf"
 
 rfr = require "rfr"
 config = rfr "config"
@@ -24,15 +24,16 @@ router.get "/login", brute.prevent, (req, res) ->
 
 router.post "/login", (req, res) ->
 	Promise.try ->
-		scrypt.verifyHash req.body.password, config.admin.hash
-	.then ->
-		if req.body.username == config.admin.username
-			req.session.isAdmin = true
-			res.redirect "/admin"
+		scrypt.verify(Buffer.from(config.admin.hash, 'base64'), req.body.password)
+	.then (success) ->
+		if ( success )
+			if req.body.username == config.admin.username
+				req.session.isAdmin = true
+				res.redirect "/admin"
+			else
+				res.redirect "/admin"
 		else
 			res.redirect "/admin/login"
-	.catch scrypt.PasswordError, (err) ->
-		res.redirect "/admin/login"
 
 router.post "/logout", authMiddleware, (req, res) ->
 	delete req.session.isAdmin
