@@ -91,11 +91,11 @@ block content
 					th
 				for post in blogPosts
 					tr
-						td: a(href="/blog/#{post.Id}/#{post.Slug}")= post.Title
+						td: a(href=`/blog/${post.Id}/${post.Slug}`)= post.Title
 						td= shortDate(post.Posted)
 						td= shortDate(post.Edited)
 						td
-							a.pure-button.pure-button-small(href="/admin/blog/edit/#{post.Id}") Edit
-							a.pure-button.pure-button-small(href="/admin/blog/delete/#{post.Id}") Remove
+							a.pure-button.pure-button-small(href=`/admin/blog/edit/${post.Id}`) Edit
+							a.pure-button.pure-button-small(href=`/admin/blog/delete/${post.Id}`) Remove
 				else
 					tr: td(colspan=4) None yet!
