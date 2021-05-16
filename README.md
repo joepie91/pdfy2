@@ -4,7 +4,7 @@ This is the source code for [PDFy](https://pdf.yt/).
 
 ## Setup
 
-1. Use NVM to switch to Node 0.12
+1. Use NVM to switch to Node 4
 2. ./setup.sh
 3. npm install knex@0.7.6 coffee-script@1.7.1 --global
 4. knex migrate:latest
