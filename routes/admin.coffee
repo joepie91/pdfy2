@@ -10,19 +10,15 @@ authMiddleware = rfr "lib/middleware-auth"
 useCsrf = rfr "lib/use-csrf"
 persist = rfr "lib/persist"
 
-# TODO: This needs to go into a better place...?
-expressBrute = require "express-brute"
-persistBrute = require "../lib/persist-brute"
-
-bruteStore = new persistBrute(persist: persist)
-brute = new expressBrute(bruteStore)
+rateLimit = require "express-rate-limit"
+loginRateLimit = rateLimit({windowMs: 60*60*1000, max: 5, message: "Uh uh uh, naughty naughty naughty."})
 
 # Routes
 
-router.get "/login", brute.prevent, (req, res) ->
+router.get "/login", (req, res) ->
 	res.render "admin/login"
 
-router.post "/login", (req, res) ->
+router.post "/login", loginRateLimit, (req, res) ->
 	Promise.try ->
 		scrypt.verify(Buffer.from(config.admin.hash, 'base64'), req.body.password)
 	.then (success) ->
