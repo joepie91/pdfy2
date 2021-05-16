@@ -6,8 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "Base64": "^0.3.0",
     "ansi-to-html": "^0.3.0",
+    "Base64": "^0.3.0",
     "bhttp": "^1.0.3",
     "bip21": "1.0.0",
     "bluebird": "^2.9.3",
