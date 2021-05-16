@@ -4,14 +4,14 @@ This is the source code for [PDFy](https://pdf.yt/).
 
 ## Setup
 
-1. Use NVM to switch to Node 4
+1. Use nvm to install node 10
 2. ./setup.sh
-3. npm install knex@0.7.6 coffee-script@1.7.1 --global
-4. knex migrate:latest
-5. coffee bin/www.coffee
+3. npm install knex@0.7.6 coffee-script --global
+4. npx knex migrate:latest
+5. npx coffee bin/www.coffee
 6. curl -F 'file=@/path/to/a/pdf' -F 'visibility=public' http://localhost:3000/upload
-5. ??? (I'm trying, I really am, but this might not be the whole story)
-6. PROFIT!
+7. ??? (I'm trying, I really am, but this might not be the whole story)
+8. PROFIT!
 
 ## License
 
