@@ -1,0 +1,45 @@
+{
+	"ia": {
+		"access_key": "ACCESS-KEY-GOES-HERE",
+		"secret_key": "SECRET-KEY-GOES-HERE",
+		"collection": "test_collection"
+	},
+	"database": {
+		"hostname": "localhost",
+		"username": "root",
+		"password": null,
+		"database": "pdf"
+	},
+	"storage": {
+		"ia": false,
+		"local": true
+	},
+	"storage_path": "/home/sven/projects/pdfy/storage",
+	"upload_size_limit": 262144000,
+	"donations": {
+		"bitcoinAddress": "1LCeAbu2k5eiQoRsEFJnkQMTgy9xfUeeC8"
+	},
+	"thumbnails": {
+		"width": 180,
+		"height": 261
+	},
+	"display": {
+		"documentsPerPage": {
+			"gallery": 6
+		}
+	},
+	"admin": {
+		"username": "YOUR-USERNAME-GOES-HERE",
+		"hash": "YOUR-HASH-GOES-HERE"
+	},
+	"session": {
+		"signingKey": "RANDOM-STRING-GOES-HERE",
+		"path": "./sessions",
+		"ttl": 3600
+	},
+	"accessLog": {
+		"filename": "./logs/access.log",
+		"frequency": "daily",
+		"format": "combined"
+	}
+}
