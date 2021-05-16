@@ -1,7 +1,7 @@
 Promise = require "bluebird"
 router = require("express-promise-router")()
 errors = require "errors"
-busboy = require "connect-busboy"
+busboy = require "../lib/connect-busboy/connect-busboy"
 
 path = require "path"
 fs = require "fs"
