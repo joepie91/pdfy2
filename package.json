@@ -44,7 +44,7 @@
     "scrypt-kdf": "^2.0.1",
     "serve-favicon": "~2.2.0",
     "session-file-store": "0.0.3",
-    "slug": "^0.8.0",
+    "slug": "^5.0.1",
     "stream-length": "^1.0.2",
     "uuid": "^2.0.1",
     "xtend": "^4.0.0",
