@@ -2,7 +2,7 @@ $ = require "jquery"
 prettyUnits = require "pretty-units"
 
 # The AMD loader for this package doesn't work for some reason - so we explicitly disable it. This will force it to fall back to the CommonJS API.
-require "imports?define=>false!blueimp-file-upload"
+require "blueimp-file-upload/js/jquery.fileupload"
 
 data_object = null
 
