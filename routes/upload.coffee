@@ -21,7 +21,7 @@ upload = multer
 		fileSize: config.upload_size_limit ? 150 * 1024 * 1024
 	fileFilter: (req, file, cb) ->
 		if file.mimetype != "application/pdf"
-			cb "Error: Only PDFs are supported.", false
+			cb new errors.InvalidFiletype("The file you uploaded has a mime type of #{file.mimetype}, not application/pdf."), false
 		cb null, true
 	storage: multer.diskStorage
 		destination: (req, file, cb) ->
