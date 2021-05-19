@@ -3,9 +3,8 @@
 config = require "./config.json"
 
 module.exports =
-	# TODO: Do we need an environment name here?
 	development:
-		client: "mysql2"
+		client: config.database.client ? "mysql2"
 		connection:
 			database: config.database.database
 			user: config.database.username
