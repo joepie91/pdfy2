@@ -4,10 +4,10 @@ mixin metaProp(name, content)
 	meta(itemprop=name, content=content)
 
 mixin twitterProp(name, content)
-	meta(name="twitter:#{name}", content=content)
+	meta(name=`twitter:${name}`, content=content)
 
 mixin facebookProp(name, content)
-	meta(name="og:#{name}", content=content)
+	meta(name=`og:${name}`, content=content)
 
 block docContents
 	html(itemscope, itemtype="http://schema.org/CreativeWork")

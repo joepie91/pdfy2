@@ -72,7 +72,7 @@ block content
 	.latest
 		h2 Latest public documents
 		for document in latestDocuments
-			a.document(href="/d/#{document.SlugId}")
-				img(src="/static/thumbs/#{document.SlugId}.png", title="#{document.OriginalFilename}")
+			a.document(href=`/d/${document.SlugId}`)
+				img(src=`/static/thumbs/${document.SlugId}.png`, title=`${document.OriginalFilename}`)
 		a.gallery-link(href="/gallery") ... or view more public documents in the gallery &raquo;
 		.clear

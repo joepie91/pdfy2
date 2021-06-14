@@ -2,7 +2,7 @@ extends ../layout
 
 block content
 	.admin
-		+form.pure-form.pure-form-stacked.pure-g(method="post", action="/admin/blog/edit/#{post.Id || ''}")
+		+form.pure-form.pure-form-stacked.pure-g(method="post", action=`/admin/blog/edit/${post.Id || ''}`)
 			button.pure-button.submit.floating(data-min-top=24) Save
 			.pure-u-1-1
 				label Post title

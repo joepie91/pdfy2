@@ -2,7 +2,7 @@ Promise = require "bluebird"
 router = require("express-promise-router")()
 moment = require "moment"
 slug = require "slug"
-scrypt = require "scrypt-for-humans"
+scrypt = require "scrypt-kdf"
 
 rfr = require "rfr"
 config = rfr "config"
@@ -10,29 +10,26 @@ authMiddleware = rfr "lib/middleware-auth"
 useCsrf = rfr "lib/use-csrf"
 persist = rfr "lib/persist"
 
-# TODO: This needs to go into a better place...?
-expressBrute = require "express-brute"
-persistBrute = require "../lib/persist-brute"
-
-bruteStore = new persistBrute(persist: persist)
-brute = new expressBrute(bruteStore)
+rateLimit = require "express-rate-limit"
+loginRateLimit = rateLimit({windowMs: 60*60*1000, max: 5, message: "Uh uh uh, naughty naughty naughty."})
 
 # Routes
 
-router.get "/login", brute.prevent, (req, res) ->
+router.get "/login", (req, res) ->
 	res.render "admin/login"
 
-router.post "/login", (req, res) ->
+router.post "/login", loginRateLimit, (req, res) ->
 	Promise.try ->
-		scrypt.verifyHash req.body.password, config.admin.hash
-	.then ->
-		if req.body.username == config.admin.username
-			req.session.isAdmin = true
-			res.redirect "/admin"
+		scrypt.verify(Buffer.from(config.admin.hash, 'base64'), req.body.password)
+	.then (success) ->
+		if ( success )
+			if req.body.username == config.admin.username
+				req.session.isAdmin = true
+				res.redirect "/admin"
+			else
+				res.redirect "/admin"
 		else
 			res.redirect "/admin/login"
-	.catch scrypt.PasswordError, (err) ->
-		res.redirect "/admin/login"
 
 router.post "/logout", authMiddleware, (req, res) ->
 	delete req.session.isAdmin

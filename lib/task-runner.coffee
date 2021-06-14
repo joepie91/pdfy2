@@ -10,6 +10,7 @@ makeExternalPromise = ->
 
 module.exports = class TaskRunner extends EventEmitter
 	constructor: (@context = {}) ->
+		super()
 		@_taskTypes = {}
 		@_queue = {}
 		@_runningCount = {}

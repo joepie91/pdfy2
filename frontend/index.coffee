@@ -29,7 +29,3 @@ $ ->
 	$(".md-editor")
 		.on "change input propertychange", updatePreview
 		.each updatePreview
-
-
-
-

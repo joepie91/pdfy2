@@ -7,7 +7,7 @@ block extra-head
 block content
 	.viewer-contents
 		.viewer-wrapper
-			iframe.viewer(allowfullscreen, src="/d/#{document.SlugId}/embed/?sparse=1&footer=0")
+			iframe.viewer(allowfullscreen, src=`/d/${document.SlugId}/embed/?sparse=1&footer=0`)
 
 		.bottombar
 			.header-wrapper: h2= document.OriginalFilename
@@ -15,10 +15,10 @@ block content
 				.views #{document.Views} views
 				.download
 					="Download as: "
-					a.pure-button.inline(href="/d/#{document.SlugId}/download") PDF
+					a.pure-button.inline(href=`/d/${document.SlugId}/download`) PDF
 				.embed
 					="Embed: "
-					input.autoselect.embed_code(value='<iframe src="//pdf.yt/d/#{document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>')
+					input.autoselect.embed_code(value=`<iframe src="//pdf.yt/d/${document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>`)
 
 		.sidebar
 			.donation-box
@@ -42,16 +42,16 @@ block content
 
 					p.formats
 						="Format: "
-						a.pure-button.inline(href="/d/#{document.SlugId}/download") PDF
+						a.pure-button.inline(href=`/d/${document.SlugId}/download`) PDF
 						if document.Mirrored
-							a.pure-button.inline(href="https://archive.org/details/pdfy-#{document.SlugId}", target="_blank")
+							a.pure-button.inline(href=`https://archive.org/details/pdfy-${document.SlugId}`, target="_blank")
 								img.icon(src="/images/ia.png")
 								| Mirror
 
 				.embed-box
 					h3 Embed this document
 
-					textarea.autoselect.embed_code <iframe src="//pdf.yt/d/#{document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>
+					textarea.autoselect.embed_code(value=`<iframe src="//pdf.yt/d/${document.SlugId}/embed?sparse=0&donation_link=0" style="width: 100%; height: 700px; border: 0px;" allowfullscreen></iframe>`)
 
 					.toolbar-settings
 						input#show_toolbar(type="checkbox", name="show_toolbar", checked)
@@ -63,7 +63,7 @@ block content
 				.link-box
 					h3 Link to this document
 
-					input.autoselect.link_code(type="text", value="https://pdf.yt/d/#{document.SlugId}")
+					input.autoselect.link_code(type="text", value=`https://pdf.yt/d/${document.SlugId}`)
 
 				.stats
 					p #{document.Views} views since #{document.Uploaded}

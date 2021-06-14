@@ -430,7 +430,7 @@ html(dir="ltr", mozdisallowselectionprint, moznomarginboxes)
             </a>
           </div>
         a#pdfyToolbarToggle.original.toolbarButton.rightHalf.arrow(href="https://pdf.yt/", target="_blank") More...
-        a#original_download.original.toolbarButton.leftHalf(href="https://pdf.yt/d/#{document.SlugId}/download", target="_blank") Download original PDF
+        a#original_download.original.toolbarButton.leftHalf(href=`https://pdf.yt/d/#{document.SlugId}/download`, target="_blank") Download original PDF
         if showDonationLink
           a#donationStatus(href="https://pdf.yt/donate", target="_blank")
             .text
@@ -438,7 +438,7 @@ html(dir="ltr", mozdisallowselectionprint, moznomarginboxes)
               | #{(donationTotal / donationGoal) * 100}%
             .progress
               .progress-container
-                .progress-fill(style="width: #{(donationTotal / donationGoal) * 100}%;")
+                .progress-fill(style=`width: ${(donationTotal / donationGoal) * 100}%;`)
         span#logo_prefix= "Free instant PDF hosting by "
         a(href="https://pdf.yt/", target="_blank")
           img.embed-logo(src="/static/pdfjs/images/embed-logo.png")

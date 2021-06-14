@@ -1,7 +1,8 @@
 Promise = require "bluebird"
 router = require("express-promise-router")()
 errors = require "errors"
-busboy = require "connect-busboy"
+multer = require "multer"
+process = require "process"
 
 path = require "path"
 fs = require "fs"
@@ -13,19 +14,34 @@ streamContains = rfr "lib/stream-contains"
 tapError = rfr "lib/tap-error"
 disableInMaintenanceMode = rfr "lib/disable-in-maintenance-mode"
 
-router.post "/", disableInMaintenanceMode, busboy(limits: {fileSize: (config.upload_size_limit ? (150 * 1024 * 1024))}), (req, res) ->
+copyfile = Promise.promisify fs.copyFile
+
+upload = multer
+	limits:
+		fileSize: config.upload_size_limit ? 150 * 1024 * 1024
+	fileFilter: (req, file, cb) ->
+		if file.mimetype != "application/pdf"
+			cb new errors.InvalidFiletype("The file you uploaded has a mime type of #{file.mimetype}, not application/pdf."), false
+		cb null, true
+	storage: multer.diskStorage
+		destination: (req, file, cb) ->
+			fs.mkdir "/tmp/pdfy-#{process.pid}", (err) ->
+				cb null, "/tmp/pdfy-#{process.pid}"
+		filename: (req, file, cb) ->
+			randomString 16
+			.then (value) ->
+				cb null, value
+
+router.post "/", disableInMaintenanceMode, upload.single('file'), (req, res) ->
 	Promise.try ->
 		Promise.all [
 			randomString 16
-			randomString 16
 		]
-	.spread (slugID, fileID) ->
-		storagePath = path.join config.storage_path, fileID
+	.spread (slugID) ->
+		storagePath = path.join config.storage_path, req.file.filename
 
 		Promise.try ->
-			handleUpload req, res, storagePath: storagePath, fieldName: "file"
-		.then ->
-			headStream = fs.createReadStream storagePath, end: 1023
+			headStream = fs.createReadStream req.file.path, end: 1023
 			streamContains headStream, "%PDF"
 		.then (isPDF) ->
 			if isPDF
@@ -33,12 +49,14 @@ router.post "/", disableInMaintenanceMode, busboy(limits: {fileSize: (config.upl
 			else
 				Promise.reject new errors.InvalidFiletype "The file you uploaded is not a valid PDF file."
 		.then ->
+			copyfile req.file.path, path.resolve(config.storage_path, req.file.filename)
+		.then ->
 			objData =
 				SlugId: slugID
 				Public: (req.body.visibility == "public")
 				Views: 0
-				OriginalFilename: req.files.file.filename
-				Filename: fileID
+				OriginalFilename: req.file.originalname
+				Filename: req.file.filename
 				Mirrored: 0
 				CDN: 0
 				Thumbnailed: 0
@@ -63,46 +81,5 @@ router.post "/", disableInMaintenanceMode, busboy(limits: {fileSize: (config.upl
 		# TODO (CDN) SPEC: Then: (tasks abstracted to task file)
 		# * Create task: Tahoe-LAFS upload, update DB entry
 		# * Check if all tasks completed; if yes, remove file (but only if config says local storage is disabled).
-
-handleUpload = (req, res, options) ->
-	if not req.busboy?
-		return Promise.resolve()
-	else
-		return new Promise (resolve, reject) ->
-			processFields req, res, options
-			processFiles req, res, options
-
-			req.busboy.on "finish", ->
-				resolve()
-
-			req.pipe req.busboy
-
-processFields = (req, res, options) ->
-	req.body ?= {}
-
-	req.busboy.on "field", (name, value, keyTruncated, valueTruncated) ->
-		req.body[name] = value
-
-processFiles = (req, res, options) ->
-	req.busboy.on "file", (name, file, filename, encoding, mimetype) ->
-		# TODO: Is the encoding taken care of automatically...?
-		if name != options.fieldName
-			# This is not the correct form field. Ignore it.
-			return
-
-		file
-			.on "limit", ->
-				# The maximum file size was exceeded.
-				file.unpipe()
-				reject new errors.UploadTooLarge "The file you attempted to upload is too large."
-			.pipe fs.createWriteStream(options.storagePath)
-
-		req.files ?= {}
-
-		req.files[name] =
-			filename: filename
-			encoding: encoding
-			mimetype: mimetype
-			storagePath: options.storagePath
 
 module.exports = router

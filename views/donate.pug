@@ -5,20 +5,20 @@ block pageTitle
 
 mixin donationType(value, label)
 	.option&attributes(attributes)
-		label(for="type_#{value}")= label
-		input(id="type_#{value}", type="radio", value=value, name="type-type")
+		label(for=`type_${value}`)= label
+		input(id=`type_${value}`, type="radio", value=value, name="type-type")
 
 mixin donationAmount(amount)
 	.option&attributes(attributes)
-		label(for="amount_#{amount}")
+		label(for=`amount_${amount}`)
 			strong €#{amount}
 			span.exchange-rate  (~$#{Math.round(amount * rates.USD * 100) / 100})
-		input(id="amount_#{amount}", type="radio", value=amount, name="type-amount")
+		input(id=`amount_${amount}`, type="radio", value=amount, name="type-amount")
 
 mixin donationMethod(value)
 	.option.payment-method&attributes(attributes)
 		block
-		input(id="method_#{value}", type="radio", value=value, name="type-method")
+		input(id=`method_${value}`, type="radio", value=value, name="type-method")
 
 block subtext
 
@@ -38,7 +38,7 @@ block content
 			label Our goal for #{currentMonth}:
 			.progress-bar
 				.progress-text <strong>€#{donationTotal}</strong> / €#{donationGoal}
-				.progress-fill(style="width: #{(donationTotal / donationGoal) * 100}%")
+				.progress-fill(style=`width: ${(donationTotal / donationGoal) * 100}%`)
 
 		.js-unavailable
 			section

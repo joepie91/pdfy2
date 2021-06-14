@@ -10,7 +10,7 @@ block content
 			h3 Latest posts
 			for post in posts
 				.post
-					a(href="/blog/#{post.Id}/#{post.Slug}")
+					a(href=`/blog/${post.Id}/${post.Slug}`)
 						span.date= post.Posted
 						| &raquo;
 						span.title= post.Title

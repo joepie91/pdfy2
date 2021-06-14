@@ -4,6 +4,7 @@
 module.exports = (session) ->
 	class PersistSessionStore extends session.Store
 		constructor: (options) ->
+			super options
 			@persist = options.persist
 
 		get: (sid, callback) ->
