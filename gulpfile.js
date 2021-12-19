@@ -1,5 +1,5 @@
 const { src, dest, series } = require('gulp');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('node-sass'));
 const webpackStream = require('webpack-stream');
 const rename = require("gulp-rename");
 const path = require('path');

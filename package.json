@@ -59,11 +59,11 @@
     "gulp": "^4.0.2",
     "gulp-coffee": "^3.0.3",
     "gulp-rename": "^2.0.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.0.0",
     "imports-loader": "^2.0.0",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.12.1",
-    "node-sass": "^6.0.0",
+    "node-sass": "^7.0.0",
     "pretty-units": "^0.1.0",
     "webpack-stream": "^6.1.2"
   }

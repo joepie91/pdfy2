@@ -4,7 +4,7 @@ This is the source code for [PDFy](https://pdf.yt/).
 
 ## Setup
 
-1. Use nvm to install node 10
+1. Use nvm to install node 17
 2. ./setup.sh
 3. npm install knex@0.7.6 coffeescript --global
 4. npx knex migrate:latest
