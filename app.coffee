@@ -49,7 +49,7 @@ runWrapper ->
 	logger = require('morgan')
 	cookieParser = require('cookie-parser')
 	bodyParser = require('body-parser')
-	fancyshelf = require "fancyshelf"
+	fancyshelf = require "./lib/fancyshelf"
 	session = require "express-session"
 	csurf = require "csurf"
 	fileStreamRotator = require "file-stream-rotator"
