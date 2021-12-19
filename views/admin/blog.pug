@@ -9,7 +9,7 @@ block content
 				input.pure-u-1-1(type="text", name="title", value=(post.Title || ""))
 			.pure-u-1-2
 				label Post body
-				textarea.md-editor.pure-u-1-1(name="body"):= post.Body || ""
+				textarea.md-editor.pure-u-1-1(name="body")= post.Body || ""
 			.pure-u-1-2
 				label Preview
 				.md-preview
