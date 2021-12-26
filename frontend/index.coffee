@@ -24,7 +24,7 @@ $ ->
 	autosize($(".md-editor"))
 
 	updatePreview = ->
-		$(".md-preview").html(marked($(this).val()))
+		$(".md-preview").html(marked.parse($(this).val()))
 
 	$(".md-editor")
 		.on "change input propertychange", updatePreview

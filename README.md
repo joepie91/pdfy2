@@ -7,7 +7,7 @@ This is the source code for [PDFy](https://pdf.yt/).
 1. Use nvm to install node 17
 2. ./setup.sh
 3. npx knex migrate:latest
-4. npx -p gulp-cli gulp
+4. NODE_OPTIONS="--openssl-legacy-provider" npx gulp
 5. npx coffee bin/www.coffee
 6. curl -F 'file=@/path/to/a/pdf' -F 'visibility=public' http://localhost:3000/upload
 7. ??? (I'm trying, I really am, but this might not be the whole story)
