@@ -10,3 +10,8 @@
 /thumbnails/
 /logs/
 .sass-cache
+
+public/css/style.css
+frontend/index.js
+frontend/lib/*.js
+public/js/bundle.js

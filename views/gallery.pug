@@ -6,8 +6,8 @@ block pageTitle
 block content
 	div.gallery.clearfix
 		for document in documents
-			a.document(href="/d/#{document.SlugId}")
-				span.thumb: img(src="/static/thumbs/#{document.SlugId}.png")
+			a.document(href=`/d/${document.SlugId}`)
+				span.thumb: img(src=`/static/thumbs/${document.SlugId}.png`)
 				span.name= document.OriginalFilename
 				span.date Uploaded on #{document.Uploaded}
 				span.views #{document.Views} views
@@ -15,8 +15,8 @@ block content
 			p No documents have been uploaded yet.
 
 		if pageNumber > 0
-			a.previous(href="/gallery/#{(pageNumber + 1) - 1}") << Previous
+			a.previous(href=`/gallery/${(pageNumber + 1) - 1}`) << Previous
 
 		if (pageNumber + 1) < pageCount
-			a.next(href="/gallery/#{(pageNumber + 1) + 1}") Next >>
+			a.next(href=`/gallery/${(pageNumber + 1) + 1}`) Next >>
 

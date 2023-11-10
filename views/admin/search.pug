@@ -36,8 +36,8 @@ block content-nowrap
 
 					for result in results
 						tr
-							td: input(type="checkbox", name="document[#{result.Id}]", value="1")
-							td: a(href="/d/#{result.SlugId}")= result.SlugId
+							td: input(type="checkbox", name=`document[${result.Id}]`, value="1")
+							td: a(href=`/d/${result.SlugId}`)= result.SlugId
 							td= !!(result.Public)
 							td= result.OriginalFilename
 							td= result.Views

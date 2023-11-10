@@ -7,7 +7,7 @@ module.exports = (req, res, next) ->
 		return applicableClasses.join " "
 
 	res.locals.makeBreakable = (string) ->
-		require("jade/lib/runtime").escape(string).replace(/_/g, "_<wbr>")
+		require("pug-runtime").escape(string).replace(/_/g, "_<wbr>")
 
 	res.locals.shortDate = (date) ->
 		moment(date).format "MMM Do, YYYY hh:mm:ss"

@@ -49,7 +49,7 @@ runWrapper ->
 	logger = require('morgan')
 	cookieParser = require('cookie-parser')
 	bodyParser = require('body-parser')
-	fancyshelf = require "fancyshelf"
+	fancyshelf = require "./lib/fancyshelf"
 	session = require "express-session"
 	csurf = require "csurf"
 	fileStreamRotator = require "file-stream-rotator"
@@ -73,7 +73,7 @@ runWrapper ->
 
 	# Error handling
 	pe = PrettyError.start()
-	pe.skipPackage "bluebird", "coffee-script", "express", "express-promise-router", "jade"
+	pe.skipPackage "bluebird", "coffee-script", "express", "express-promise-router", "pug"
 	pe.skipNodeFiles()
 
 	errors.create
@@ -137,7 +137,7 @@ runWrapper ->
 
 	# Configure Express
 	app.set('views', path.join(__dirname, 'views'))
-	app.set('view engine', 'jade')
+	app.set('view engine', 'pug')
 
 	# Middleware
 	if app.get("env") == "development"
